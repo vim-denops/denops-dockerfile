@@ -1,4 +1,0 @@
-#!/bin/bash -eu
-
-docker buildx build -f build.Dockerfile -t denops-build .
-docker buildx build -t denops .
