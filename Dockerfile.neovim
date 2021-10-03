@@ -54,7 +54,7 @@ RUN mkdir -p /opt/deno/bin \
 FROM debian:bullseye-slim as runtime
 ENV DEBIAN_FRONTEND=noninteractive
 
-LABEL org.opencontainers.image.url https://github.com/orgs/vim-denops/packages/container/package/vim
+LABEL org.opencontainers.image.url https://github.com/orgs/vim-denops/packages/container/package/neovim
 LABEL org.opencontainers.image.source https://github.com/vim-denops/denops-dockerfile
 
 # Prefer to use Debian Backports
