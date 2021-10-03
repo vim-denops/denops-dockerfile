@@ -49,6 +49,7 @@ RUN mkdir -p /opt/deno/bin \
 
 #------------------------------------------------------------------------------------------------------------
 FROM debian:bullseye-slim as runtime
+ENV DEBIAN_FRONTEND=noninteractive
 
 LABEL org.opencontainers.image.url https://github.com/orgs/vim-denops/packages/container/package/vim
 LABEL org.opencontainers.image.source https://github.com/vim-denops/denops-dockerfile
@@ -63,7 +64,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=private \
     apt-get update \
  && apt-get install -y --no-install-recommends \
       ca-certificates \
-      git
+      git \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 # Runtime environment
 ENV LC_ALL=C.UTF-8 \
