@@ -26,9 +26,9 @@ jobs:
         id: vars
         run: |
           if [[ "${{ github.event.inputs.denops_version }}" -ne "" ]]; then
-            echo '::set-output name=DENOPS_VERSION=${{ github.event.inputs.denops_version }}'
+            echo '::set-output name=DENOPS_VERSION::${{ github.event.inputs.denops_version }}'
           else
-            echo '::set-output name=DENOPS_VERSION=main'
+            echo '::set-output name=DENOPS_VERSION::main'
           fi
         shell: bash
       - run: make DENOPS_VERSION=${{ steps.vars.outputs.DENOPS_VERSION }} build
