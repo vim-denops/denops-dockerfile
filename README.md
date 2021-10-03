@@ -11,7 +11,15 @@ Create a new docker image from [ghcr.io/vim-denops/vim][] or [ghcr.io/vim-denops
 ```Dockerfile
 FROM ghcr.io/vim-denops/vim
 
-RUN git clone https://github.com/vim-denops/denops-helloworld.vim \
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      curl \
+      ca-certificates \
+      ripgrep
+
+ARG VERSION=main
+RUN curl -sSL https://github.com/vim-denops/denops-helloworld.vim/archive/${VERSION}.tar.gz \
+  | tar xz \
  && deno cache --unstable */denops/**/*.ts
 ```
 
@@ -56,6 +64,11 @@ Copy above `.vimrc` with `COPY` command like
 
 ```Dockerfile
 FROM ghcr.io/vim-denops/vim
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      ca-certificates \
+      git
 
 RUN git clone https://github.com/Shougo/ddc.vim \
  && git clone https://github.com/Shougo/ddc-around \

@@ -48,7 +48,30 @@ RUN mkdir -p /opt/deno/bin \
 
 
 #------------------------------------------------------------------------------------------------------------
+FROM debian:bullseye-backports as denops
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install requirements
+RUN --mount=type=cache,target=/var/cache/apt,sharing=private \
+    --mount=type=cache,target=/var/lib/apt,sharing=private \
+    apt-get update \
+ && apt-get install -y --no-install-recommends \
+      ca-certificates \
+      git
+
+# Install denops.vim
+ARG DENOPS_VERSION=main
+RUN mkdir -p denops.vim \
+ && cd denops.vim \
+ && git init \
+ && git remote add origin https://github.com/vim-denops/denops.vim.git \
+ && git fetch origin ${DENOPS_VERSION} \
+ && git reset --hard FETCH_HEAD
+
+
+#------------------------------------------------------------------------------------------------------------
 FROM debian:bullseye-slim as runtime
+ENV DEBIAN_FRONTEND=noninteractive
 
 LABEL org.opencontainers.image.url https://github.com/orgs/vim-denops/packages/container/package/vim
 LABEL org.opencontainers.image.source https://github.com/vim-denops/denops-dockerfile
@@ -57,31 +80,16 @@ LABEL org.opencontainers.image.source https://github.com/vim-denops/denops-docke
 # https://backports.debian.org/
 RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' > /etc/apt/sources.list.d/backports.list
 
-# Install requirements
-RUN --mount=type=cache,target=/var/cache/apt,sharing=private \
-    --mount=type=cache,target=/var/lib/apt,sharing=private \
-    apt-get update \
- && apt-get install -y --no-install-recommends \
-      ca-certificates \
-      git \
-      ripgrep
-
 # Runtime environment
 ENV LC_ALL=C.UTF-8 \
     PATH=/opt/vim/usr/local/bin:/opt/deno/bin:${PATH}
 
 COPY --from=vim /opt/vim /opt/vim
 COPY --from=deno /opt/deno /opt/deno
+COPY --from=denops /denops.vim /root/.vim/pack/denops/start/denops.vim
 
 # Install denops.vim
 WORKDIR /root/.vim/pack/denops/start
-ARG DENOPS_VERSION=main
-RUN mkdir -p denops.vim \
- && cd denops.vim \
- && git init \
- && git remote add origin https://github.com/vim-denops/denops.vim.git \
- && git fetch origin ${DENOPS_VERSION} \
- && git reset --hard FETCH_HEAD
 RUN deno cache --unstable */denops/**/*.ts
 
 ENTRYPOINT ["/opt/vim/bin/vim"]

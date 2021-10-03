@@ -1,5 +1,10 @@
 FROM ghcr.io/vim-denops/neovim
 
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      ca-certificates \
+      git
+
 RUN git clone https://github.com/Shougo/ddc.vim \
  && git clone https://github.com/Shougo/ddc-around \
  && git clone https://github.com/Shougo/ddc-matcher_head \
