@@ -1,0 +1,85 @@
+# syntax=docker/dockerfile:1.3
+#------------------------------------------------------------------------------------------------------------
+FROM debian:bullseye-backports as neovim
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install requirements
+RUN --mount=type=cache,target=/var/cache/apt,sharing=private \
+    --mount=type=cache,target=/var/lib/apt,sharing=private \
+    apt-get update \
+ && apt-get install -y --no-install-recommends \
+      curl \
+      ca-certificates \
+      build-essential \
+      ninja-build \
+      gettext \
+      libtool \
+      libtool-bin \
+      autoconf \
+      automake \
+      cmake \
+      g++ \
+      pkg-config \
+      unzip
+
+ARG NEOVIM_VERSION=v0.5.1
+RUN mkdir -p /opt/neovim \
+ && curl -sSL https://github.com/neovim/neovim/releases/download/${NEOVIM_VERSION}/nvim-linux64.tar.gz \
+  | tar xz -C /opt/neovim --strip-components=1
+
+
+#------------------------------------------------------------------------------------------------------------
+FROM debian:bullseye-backports as deno
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install requirements
+RUN --mount=type=cache,target=/var/cache/apt,sharing=private \
+    --mount=type=cache,target=/var/lib/apt,sharing=private \
+    apt-get update \
+ && apt-get install -y --no-install-recommends \
+      curl \
+      ca-certificates \
+      unzip \
+      git
+
+ARG DENO_VERSION=v1.14.0
+WORKDIR /working
+RUN curl -sSL -O https://github.com/denoland/deno/releases/download/${DENO_VERSION}/deno-x86_64-unknown-linux-gnu.zip \
+ && unzip deno-x86_64-unknown-linux-gnu.zip
+RUN mkdir -p /opt/deno/bin \
+ && mv deno /opt/deno/bin/deno
+
+
+#------------------------------------------------------------------------------------------------------------
+FROM debian:bullseye-slim as runtime
+
+LABEL org.opencontainers.image.url https://github.com/orgs/vim-denops/packages/container/package/vim
+LABEL org.opencontainers.image.source https://github.com/vim-denops/denops-dockerfile
+
+# Prefer to use Debian Backports
+# https://backports.debian.org/
+RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' > /etc/apt/sources.list.d/backports.list
+
+# Install requirements
+RUN --mount=type=cache,target=/var/cache/apt,sharing=private \
+    --mount=type=cache,target=/var/lib/apt,sharing=private \
+    apt-get update \
+ && apt-get install -y --no-install-recommends \
+      ca-certificates \
+      git \
+      ripgrep
+
+# Runtime environment
+ENV LC_ALL=C.UTF-8 \
+    PATH=/opt/vim/usr/local/bin:/opt/deno/bin:${PATH}
+
+COPY --from=neovim /opt/neovim /opt/neovim
+COPY --from=deno /opt/deno /opt/deno
+
+# Install denops.vim
+WORKDIR /root/.local/share/nvim/site/pack/denops/start
+ARG DENOPS_VERSION=main
+RUN git clone --depth 1 -b $DENOPS_VERSION https://github.com/vim-denops/denops.vim.git \
+ && deno cache --unstable */denops/**/*.ts
+
+ENTRYPOINT ["/opt/neovim/bin/nvim"]
