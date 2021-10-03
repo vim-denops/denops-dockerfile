@@ -1,5 +1,7 @@
 # denops-dockerfile
 
+[![Build](https://github.com/vim-denops/denops-dockerfile/actions/workflows/build.yml/badge.svg)](https://github.com/vim-denops/denops-dockerfile/actions/workflows/build.yml)
+
 ## Usage
 
 ### Minimum
