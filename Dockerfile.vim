@@ -76,7 +76,12 @@ COPY --from=deno /opt/deno /opt/deno
 # Install denops.vim
 WORKDIR /root/.vim/pack/denops/start
 ARG DENOPS_VERSION=main
-RUN git clone --depth 1 -b $DENOPS_VERSION https://github.com/vim-denops/denops.vim.git \
- && deno cache --unstable */denops/**/*.ts
+RUN mkdir -p denops.vim \
+ && cd denops.vim \
+ && git init \
+ && git remote add origin https://github.com/vim-denops/denops.vim.git \
+ && git fetch origin ${DENOPS_VERSION} \
+ && git reset --hard FETCH_HEAD
+RUN deno cache --unstable */denops/**/*.ts
 
 ENTRYPOINT ["/opt/vim/bin/vim"]
