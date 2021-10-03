@@ -1,0 +1,20 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      denops_version:
+        description: Denops version
+        required: false
+        default: "main"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: make DENOPS_VERSION=${{ github.event.inputs.denops_version || "main" }} build
+      - run: make DENOPS_VERSION=${{ github.event.inputs.denops_version || "main" }} push
