@@ -63,8 +63,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=private \
     apt-get update \
  && apt-get install -y --no-install-recommends \
       ca-certificates \
-      git \
-      ripgrep
+      git
 
 # Runtime environment
 ENV LC_ALL=C.UTF-8 \
