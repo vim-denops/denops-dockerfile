@@ -22,7 +22,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=private \
       pkg-config \
       unzip
 
-ARG NEOVIM_VERSION=v0.5.0
+ARG NEOVIM_VERSION=v0.6.0
 RUN mkdir -p /opt/neovim \
  && curl -sSL https://github.com/neovim/neovim/releases/download/${NEOVIM_VERSION}/nvim-linux64.tar.gz \
   | tar xz -C /opt/neovim --strip-components=1
@@ -42,7 +42,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=private \
       unzip \
       git
 
-ARG DENO_VERSION=v1.14.0
+ARG DENO_VERSION=v1.17.1
 WORKDIR /working
 RUN curl -sSL -O https://github.com/denoland/deno/releases/download/${DENO_VERSION}/deno-x86_64-unknown-linux-gnu.zip \
  && unzip deno-x86_64-unknown-linux-gnu.zip
