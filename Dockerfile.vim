@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.3
+# syntax=docker.io/docker/dockerfile:1.4
 #------------------------------------------------------------------------------------------------------------
 FROM debian:bullseye-backports as vim
 ENV DEBIAN_FRONTEND=noninteractive
