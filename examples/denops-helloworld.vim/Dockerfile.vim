@@ -9,4 +9,4 @@ RUN apt-get update \
 ARG VERSION=main
 RUN curl -sSL https://github.com/vim-denops/denops-helloworld.vim/archive/${VERSION}.tar.gz \
   | tar xz \
- && deno cache --unstable */denops/**/*.ts
+ && deno cache --unstable --no-check=remote */denops/**/*.ts
