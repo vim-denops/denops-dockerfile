@@ -10,7 +10,7 @@ help:
 build: build-vim build-neovim	## Build
 
 build-vim: FORCE	## Build (Vim)
-	docker buildx build \
+	docker buildx build ${BUILD_ARGS} \
 		--load \
 	    	--cache-from=ghcr.io/vim-denops/vim/cache \
 	    	--cache-from=ghcr.io/vim-denops/vim \
@@ -22,7 +22,7 @@ build-vim: FORCE	## Build (Vim)
 		.
 
 build-neovim: FORCE	## Build (Neovim)
-	docker buildx build \
+	docker buildx build ${BUILD_ARGS} \
 		--load \
 	    	--cache-from=ghcr.io/vim-denops/neovim/cache \
 	    	--cache-from=ghcr.io/vim-denops/neovim \
