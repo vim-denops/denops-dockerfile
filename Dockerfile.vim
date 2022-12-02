@@ -90,6 +90,6 @@ COPY --from=denops /denops.vim /root/.vim/pack/denops/start/denops.vim
 
 # Install denops.vim
 WORKDIR /root/.vim/pack/denops/start
-RUN deno cache --unstable */denops/**/*.ts
+RUN deno cache --unstable --no-check=remote */denops/**/*.ts
 
 ENTRYPOINT ["/opt/vim/bin/vim"]
