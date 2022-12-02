@@ -93,6 +93,6 @@ COPY --from=denops /denops.vim /root/.local/share/nvim/site/pack/denops/start/de
 
 # Install denops.vim
 WORKDIR /root/.local/share/nvim/site/pack/denops/start
-RUN deno cache --unstable */denops/**/*.ts
+RUN deno cache --unstable --no-check=remote */denops/**/*.ts
 
 ENTRYPOINT ["/opt/neovim/bin/nvim"]
