@@ -14,7 +14,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=private \
       gettext \
       libtinfo-dev
 
-ARG VIM_VERSION=v9.0.0472
+ARG VIM_VERSION=v9.0.1499
 RUN mkdir -p /working \
  && curl -sSL https://github.com/vim/vim/archive/${VIM_VERSION}.tar.gz \
   | tar xz -C /working --strip-components=1
@@ -39,7 +39,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=private \
       unzip \
       git
 
-ARG DENO_VERSION=v1.28.0
+ARG DENO_VERSION=v1.32.0
 WORKDIR /working
 RUN curl -sSL -O https://github.com/denoland/deno/releases/download/${DENO_VERSION}/deno-x86_64-unknown-linux-gnu.zip \
  && unzip deno-x86_64-unknown-linux-gnu.zip
