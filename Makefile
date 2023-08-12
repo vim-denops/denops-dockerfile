@@ -1,4 +1,5 @@
 DENOPS_VERSION := main
+DOCKER_TAG := latest
 DOCKER_REGISTRY := ghcr.io/vim-denops
 
 .DEFAULT_GOAL := help
@@ -17,7 +18,7 @@ build-vim: FORCE	## Build (Vim)
 			--cache-from=${DOCKER_REGISTRY}/vim \
 			--cache-to=type=registry,ref=${DOCKER_REGISTRY}/vim/cache,mode=max \
 		--build-arg DENOPS_VERSION=${DENOPS_VERSION} \
-		-t ${DOCKER_REGISTRY}/vim \
+		-t denops-dockerfile/vim \
 		-f Dockerfile.vim \
 		.
 
@@ -28,18 +29,18 @@ build-neovim: FORCE	## Build (Neovim)
 			--cache-from=${DOCKER_REGISTRY}/neovim \
 			--cache-to=type=registry,ref=${DOCKER_REGISTRY}/neovim/cache,mode=max \
 		--build-arg DENOPS_VERSION=${DENOPS_VERSION} \
-		-t ${DOCKER_REGISTRY}/neovim \
+		-t denops-dockerfile/neovim \
 		-f Dockerfile.neovim \
 		.
 
 push: push-vim push-neovim	## Push
 
 push-vim: FORCE	## Push (Vim)
-	docker tag ${DOCKER_REGISTRY}/vim ${DOCKER_REGISTRY}/vim:${DENOPS_VERSION}
-	docker push ${DOCKER_REGISTRY}/vim:${DENOPS_VERSION}
+	docker tag denops-dockerfile/vim ${DOCKER_REGISTRY}/vim:${DOCKER_TAG}
+	docker push ${DOCKER_REGISTRY}/vim:${DOCKER_TAG}
 
 push-neovim: FORCE	## Push (Neovim)
-	docker tag ${DOCKER_REGISTRY}/neovim ${DOCKER_REGISTRY}/neovim:${DENOPS_VERSION}
-	docker push ${DOCKER_REGISTRY}/neovim:${DENOPS_VERSION}
+	docker tag denops-dockerfile/neovim ${DOCKER_REGISTRY}/neovim:${DOCKER_TAG}
+	docker push ${DOCKER_REGISTRY}/neovim:${DOCKER_TAG}
 
 FORCE:
