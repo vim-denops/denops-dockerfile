@@ -9,7 +9,7 @@ on:
       denops_version:
         description: Denops version
         required: false
-        default: "main"
+        default: "v5.0.0"  # or "main"
 
 jobs:
   build:
@@ -32,4 +32,21 @@ jobs:
           fi
         shell: bash
       - run: make DENOPS_VERSION=${{ steps.vars.outputs.DENOPS_VERSION }} build
+
+      - name: Push to ghcr.io
+        env:
+          DENOPS_VERSION: ${{ steps.vars.outputs.DENOPS_VERSION }}
+        shell: bash
+        run: |
+          if [[ ${{ env.DENOPS_VERSION }} == "v*" ]]; then
+            # Full version string
+            make DENOPS_VERSION={{ env.DENOPS_VERSION }} push
+            # vX.Y.Z -> vX (major only)
+            make DENOPS_VERSION=$(echo $DENOPS_VERSION | sed -r 's/(v[0-9]+)(\.[0-9]+)(\.[0-9]+)/\1/') push
+            # vX.Y.Z -> vX.Y (major and minor)
+            make DENOPS_VERSION=$(echo $DENOPS_VERSION | sed -r 's/(v[0-9]+)(\.[0-9]+)(\.[0-9]+)/\1\2/') push
+          fi
+          make DENOPS_VERSION=latest push
+
+
       - run: make DENOPS_VERSION=${{ steps.vars.outputs.DENOPS_VERSION }} push
