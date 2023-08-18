@@ -9,7 +9,7 @@ on:
       denops_version:
         description: Denops version
         required: false
-        default: "main"
+        default: "v5.0.0"  # or "main"
 
 jobs:
   build:
@@ -26,10 +26,26 @@ jobs:
         id: vars
         run: |
           if [[ -z "${{ github.event.inputs.denops_version }}" ]]; then
-            echo '::set-output name=DENOPS_VERSION::main'
+            echo '::set-output name=DENOPS_VERSION::v5.0.0'
           else
             echo '::set-output name=DENOPS_VERSION::${{ github.event.inputs.denops_version }}'
           fi
         shell: bash
-      - run: make DENOPS_VERSION=${{ steps.vars.outputs.DENOPS_VERSION }} build
-      - run: make DENOPS_VERSION=${{ steps.vars.outputs.DENOPS_VERSION }} push
+
+      - name: Build and Push to ghcr.io
+        env:
+          DENOPS_VERSION: ${{ steps.vars.outputs.DENOPS_VERSION }}
+        shell: bash
+        run: |
+          make DENOPS_VERSION=$DENOPS_VERSION build
+          if [[ $DENOPS_VERSION == v* ]]; then
+            # Full version string
+            make DOCKER_TAG=$DENOPS_VERSION push
+            # vX.Y.Z -> vX.Y (major and minor)
+            export DOCKER_TAG_MINOR=$(echo $DENOPS_VERSION | sed -r 's/(v[0-9]+)(\.[0-9]+)(\.[0-9]+)/\1\2/')
+            make DOCKER_TAG=$DOCKER_TAG_MINOR push
+            # vX.Y.Z -> vX (major only)
+            export DOCKER_TAG_MAJOR=$(echo $DENOPS_VERSION | sed -r 's/(v[0-9]+)(\.[0-9]+)(\.[0-9]+)/\1/')
+            make DOCKER_TAG=$DOCKER_TAG_MAJOR push
+          fi
+          make DOCKER_TAG=latest push
