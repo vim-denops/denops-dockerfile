@@ -14,7 +14,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=private \
       gettext \
       libtinfo-dev
 
-ARG VIM_VERSION=v9.0.1499
+ARG VIM_VERSION=v9.1.0448
 RUN mkdir -p /working \
  && curl -sSL https://github.com/vim/vim/archive/${VIM_VERSION}.tar.gz \
   | tar xz -C /working --strip-components=1
