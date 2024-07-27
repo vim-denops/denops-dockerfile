@@ -26,9 +26,9 @@ jobs:
         id: vars
         run: |
           if [[ -z "${{ github.event.inputs.denops_version }}" ]]; then
-            echo '::set-output name=DENOPS_VERSION::main'
+            echo 'DENOPS_VERSION=main' >> $GITHUB_OUTPUT
           else
-            echo '::set-output name=DENOPS_VERSION::${{ github.event.inputs.denops_version }}'
+            echo 'DENOPS_VERSION=${{ github.event.inputs.denops_version }}' >> $GITHUB_OUTPUT
           fi
         shell: bash
 
