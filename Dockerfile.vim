@@ -89,4 +89,7 @@ WORKDIR /root/.vim/pack/denops/start/denops.vim
 RUN deno cache denops/**/*.ts
 WORKDIR /root/.vim/pack/denops/start
 
+# Create helptags
+RUN /opt/vim/bin/vim -i NONE -n -N -X -e -s -V1 -c "helptags ALL" -c q
+
 ENTRYPOINT ["/opt/vim/bin/vim"]
