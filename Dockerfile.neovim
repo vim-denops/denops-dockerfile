@@ -93,9 +93,12 @@ COPY --from=denops /denops.vim /root/.local/share/nvim/site/pack/denops/start/de
 # Install denops.vim
 WORKDIR /root/.local/share/nvim/site/pack/denops/start/denops.vim
 RUN deno cache denops/**/*.ts
-WORKDIR /root/.vim/pack/denops/start
 
 # Create helptags
 RUN /opt/neovim/bin/nvim --headless -n -V1 -c "helptags ALL" -c q
+
+# Setup user custom pack environment
+RUN mkdir -p /root/.local/share/nvim/site/pack/user/start
+WORKDIR /root/.local/share/nvim/site/pack/user/start
 
 ENTRYPOINT ["/opt/neovim/bin/nvim"]

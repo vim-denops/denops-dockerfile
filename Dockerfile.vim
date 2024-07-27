@@ -87,9 +87,12 @@ COPY --from=denops /denops.vim /root/.vim/pack/denops/start/denops.vim
 # Install denops.vim
 WORKDIR /root/.vim/pack/denops/start/denops.vim
 RUN deno cache denops/**/*.ts
-WORKDIR /root/.vim/pack/denops/start
 
 # Create helptags
 RUN /opt/vim/bin/vim -i NONE -n -N -X -e -s -V1 -c "helptags ALL" -c q
+
+# Setup user custom pack environment
+RUN mkdir -p /root/.vim/pack/user/start
+WORKDIR /root/.vim/pack/user/start
 
 ENTRYPOINT ["/opt/vim/bin/vim"]

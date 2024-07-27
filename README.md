@@ -20,7 +20,7 @@ RUN apt-get update \
 ARG VERSION=main
 RUN curl -sSL https://github.com/vim-denops/denops-helloworld.vim/archive/${VERSION}.tar.gz \
   | tar xz \
- && deno cache --unstable --no-check=remote */denops/**/*.ts
+ && deno cache --no-check=remote */denops/**/*.ts
 ```
 
 Then build and run the image like
@@ -74,7 +74,7 @@ RUN git clone https://github.com/Shougo/ddc.vim \
  && git clone https://github.com/Shougo/ddc-around \
  && git clone https://github.com/Shougo/ddc-matcher_head \
  && git clone https://github.com/Shougo/ddc-sorter_rank \
- && deno cache --unstable --no-check=remote */denops/**/*.ts
+ && deno cache --no-check=remote */denops/**/*.ts
 
 COPY vimrc /root/.vimrc
 ```
