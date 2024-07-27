@@ -48,38 +48,38 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           file: ./dockerfiles/vim
-          tags:
-            - ghcr.io/vim-denops/vim:latest
-            - ghcr.io/vim-denops/vim:${{ steps.vars.outputs.DOCKER_TAG }}
-            - ghcr.io/vim-denops/vim:${{ steps.vars.outputs.DOCKER_TAG_MINOR }}
-            - ghcr.io/vim-denops/vim:${{ steps.vars.outputs.DOCKER_TAG_MAJOR }}
+          tags: |
+            ghcr.io/vim-denops/vim:latest
+            ghcr.io/vim-denops/vim:${{ steps.vars.outputs.DOCKER_TAG }}
+            ghcr.io/vim-denops/vim:${{ steps.vars.outputs.DOCKER_TAG_MINOR }}
+            ghcr.io/vim-denops/vim:${{ steps.vars.outputs.DOCKER_TAG_MAJOR }}
           cache-from: |
             ghcr.io/vim-denops/vim/cache
             ghcr.io/vim-denops/vim
           cache-to: |
             type=registry,ref=ghcr.io/vim-denops/vim/cache,mode=max
           context: .
-          platforms:
-            - linux/amd64
-            - linux/arm64
+          platforms: |
+            linux/amd64
+            linux/arm64
           push: true
 
       - name: Build and push Docker image (Neovim)
         uses: docker/build-push-action@v6
         with:
           file: ./dockerfiles/neovim
-          tags:
-            - ghcr.io/vim-denops/neovim:latest
-            - ghcr.io/vim-denops/neovim:${{ steps.vars.outputs.DOCKER_TAG }}
-            - ghcr.io/vim-denops/neovim:${{ steps.vars.outputs.DOCKER_TAG_MINOR }}
-            - ghcr.io/vim-denops/neovim:${{ steps.vars.outputs.DOCKER_TAG_MAJOR }}
+          tags: |
+            ghcr.io/vim-denops/neovim:latest
+            ghcr.io/vim-denops/neovim:${{ steps.vars.outputs.DOCKER_TAG }}
+            ghcr.io/vim-denops/neovim:${{ steps.vars.outputs.DOCKER_TAG_MINOR }}
+            ghcr.io/vim-denops/neovim:${{ steps.vars.outputs.DOCKER_TAG_MAJOR }}
           cache-from: |
             ghcr.io/vim-denops/neovim/cache
             ghcr.io/vim-denops/neovim
           cache-to: |
             type=registry,ref=ghcr.io/vim-denops/neovim/cache,mode=max
           context: .
-          platforms:
-            - linux/amd64
-            - linux/arm64
+          platforms: |
+            linux/amd64
+            linux/arm64
           push: true
