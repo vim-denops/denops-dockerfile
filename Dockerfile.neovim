@@ -42,12 +42,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=private \
       unzip \
       git
 
-ARG DENO_VERSION=v1.32.0
-WORKDIR /working
-RUN curl -sSL -O https://github.com/denoland/deno/releases/download/${DENO_VERSION}/deno-x86_64-unknown-linux-gnu.zip \
- && unzip deno-x86_64-unknown-linux-gnu.zip
-RUN mkdir -p /opt/deno/bin \
- && mv deno /opt/deno/bin/deno
+ARG DENO_VERSION=v1.45.0
+RUN curl -fsSL https://deno.land/install.sh | DENO_INSTALL=/opt/deno sh -s ${DENO_VERSION}
 
 
 #------------------------------------------------------------------------------------------------------------
@@ -92,7 +88,8 @@ COPY --from=deno /opt/deno /opt/deno
 COPY --from=denops /denops.vim /root/.local/share/nvim/site/pack/denops/start/denops.vim
 
 # Install denops.vim
-WORKDIR /root/.local/share/nvim/site/pack/denops/start
-RUN deno cache --unstable --no-check=remote */denops/**/*.ts
+WORKDIR /root/.local/share/nvim/site/pack/denops/start/denops.vim
+RUN deno cache denops/**/*.ts
+WORKDIR /root/.vim/pack/denops/start
 
 ENTRYPOINT ["/opt/neovim/bin/nvim"]
