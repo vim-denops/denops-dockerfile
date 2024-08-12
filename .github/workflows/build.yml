@@ -27,9 +27,9 @@ jobs:
         id: vars
         run: |
           if [[ -z "${{ github.event.inputs.denops_version }}" ]]; then
-            echo 'DENOPS_VERSION=main' >> $GITHUB_OUTPUT
+            DENOPS_VERSION=main
           else
-            echo 'DENOPS_VERSION=${{ github.event.inputs.denops_version }}' >> $GITHUB_OUTPUT
+            DENOPS_VERSION=${{ github.event.inputs.denops_version }}
           fi
           if [[ $DENOPS_VERSION == v* ]]; then
             echo "DOCKER_TAG=$DENOPS_VERSION" >> $GITHUB_OUTPUT
