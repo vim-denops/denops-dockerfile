@@ -1,6 +1,6 @@
 # syntax=docker.io/docker/dockerfile:1.4
 #------------------------------------------------------------------------------------------------------------
-FROM debian:bullseye-backports as vim
+FROM debian:bookworm-backports as vim
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install requirements
@@ -26,7 +26,7 @@ RUN make install
 
 
 #------------------------------------------------------------------------------------------------------------
-FROM debian:bullseye-backports as deno
+FROM debian:bookworm-backports as deno
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install requirements
@@ -44,7 +44,7 @@ RUN curl -fsSL https://deno.land/install.sh | DENO_INSTALL=/opt/deno sh -s ${DEN
 
 
 #------------------------------------------------------------------------------------------------------------
-FROM debian:bullseye-backports as denops
+FROM debian:bookworm-backports as denops
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install requirements
@@ -66,7 +66,7 @@ RUN mkdir -p denops.vim \
 
 
 #------------------------------------------------------------------------------------------------------------
-FROM debian:bullseye-slim as runtime
+FROM debian:bookworm-slim as runtime
 ENV DEBIAN_FRONTEND=noninteractive
 
 LABEL org.opencontainers.image.url https://github.com/orgs/vim-denops/packages/container/package/vim
@@ -74,7 +74,7 @@ LABEL org.opencontainers.image.source https://github.com/vim-denops/denops-docke
 
 # Prefer to use Debian Backports
 # https://backports.debian.org/
-RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' > /etc/apt/sources.list.d/backports.list
+RUN echo 'deb http://deb.debian.org/debian bookworm-backports main' > /etc/apt/sources.list.d/backports.list
 
 # Runtime environment
 ENV LC_ALL=C.UTF-8 \

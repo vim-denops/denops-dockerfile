@@ -96,13 +96,20 @@ See [examples/ddc.vim](./examples/ddc.vim) for details.
 Build [ghcr.io/vim-denops/vim][] and [ghcr.io/vim-denops/neovim][] with
 
 ```
-make build
+docker compose build
 ```
 
-The push it with
+Then push it with
 
 ```
-make push
+docker compose push
+```
+
+You can also specify the Denops version and Docker tag:
+
+```
+DENOPS_VERSION=v6.0.0 DOCKER_TAG=v6.0.0 docker compose build
+DOCKER_TAG=v6.0.0 docker compose push
 ```
 
 ## License
