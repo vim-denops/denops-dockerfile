@@ -1,0 +1,32 @@
+services:
+  vim:
+    image: ghcr.io/vim-denops/vim:${DOCKER_TAG:-latest}
+    build:
+      context: .
+      dockerfile: dockerfiles/vim
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      args:
+        DENOPS_VERSION: ${DENOPS_VERSION:-main}
+      cache_from:
+        - ghcr.io/vim-denops/vim/cache
+        - ghcr.io/vim-denops/vim
+      cache_to:
+        - type=registry,ref=ghcr.io/vim-denops/vim/cache,mode=max
+
+  neovim:
+    image: ghcr.io/vim-denops/neovim:${DOCKER_TAG:-latest}
+    build:
+      context: .
+      dockerfile: dockerfiles/neovim
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      args:
+        DENOPS_VERSION: ${DENOPS_VERSION:-main}
+      cache_from:
+        - ghcr.io/vim-denops/neovim/cache
+        - ghcr.io/vim-denops/neovim
+      cache_to:
+        - type=registry,ref=ghcr.io/vim-denops/neovim/cache,mode=max
